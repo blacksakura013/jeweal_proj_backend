@@ -8,7 +8,6 @@ import userRoutes from "./routes/userRoutes.js";
 import bookingRoutes from "./routes/bookingRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 
-
 const app = express();
 
 app.use(cors());
@@ -16,19 +15,22 @@ app.use(express.json());
 app.use(morgan("dev"));
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://precious-sawine-56ed1a.netlify.app"
+  "https://precious-sawine-56ed1a.netlify.app",
+  "https://jeweal-proj-backend.onrender.com",
 ];
 
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
 // Swagger setup
 const swaggerOptions = {
   swaggerDefinition: {
@@ -40,7 +42,7 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: "http://localhost:5000",
+        url: ["http://localhost:5000","https://jeweal-proj-backend.onrender.com/"]
       },
     ],
     components: {
@@ -67,11 +69,7 @@ app.use("/bookings", bookingRoutes);
 
 app.get("/", (req, res) => res.send("API is running..."));
 
-
-
-
 // Cron job: ตรวจสอบ Booking หมดเวลา ทุก 1 นาที
-
 
 app.listen(5000, () => console.log("Server running on port 5000"));
 export default app;
