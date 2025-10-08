@@ -42,7 +42,7 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: ["http://localhost:5000","https://jeweal-proj-backend.onrender.com/"]
+        url: "http://localhost:5000",
       },
     ],
     components: {
