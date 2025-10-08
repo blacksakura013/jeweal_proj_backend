@@ -116,6 +116,7 @@
         "qty": 1,
         "price": 31800,
         "description": "-",
-        "img": "Image Available"
+        "img": "N/A",
+        "status": "available"
     }
 ]

@@ -9,7 +9,6 @@ import bookingRoutes from "./routes/bookingRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 
 
-
 const app = express();
 
 app.use(cors());
@@ -54,4 +53,11 @@ app.use("/bookings", bookingRoutes);
 
 app.get("/", (req, res) => res.send("API is running..."));
 
+
+
+
+// Cron job: ตรวจสอบ Booking หมดเวลา ทุก 1 นาที
+
+
+app.listen(5000, () => console.log("Server running on port 5000"));
 export default app;

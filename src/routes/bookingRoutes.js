@@ -1,5 +1,11 @@
 import express from "express";
-import { createBooking, confirmBooking } from "../controllers/bookingController.js";
+import {
+  createOrUpdateBooking,
+  addProductsToBooking,
+  removeProductsFromBooking,
+  getBookings,
+  confirmBooking,
+} from "../controllers/bookingController.js";
 import { protect } from "../middleware/auth.js";
 
 const router = express.Router();
@@ -8,15 +14,28 @@ const router = express.Router();
  * @swagger
  * tags:
  *   name: Bookings
- *   description: API สำหรับจัดการการจองสินค้า
+ *   description: จัดการการจองสินค้า
  */
 
 /**
  * @swagger
  * /bookings:
+ *   get:
+ *     summary: ดึง Booking ของผู้ใช้
+ *     tags: [Bookings]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: รายการ Booking
+ */
+router.get("/", protect, getBookings);
+
+/**
+ * @swagger
+ * /bookings:
  *   post:
- *     summary: สร้างการจองสินค้า (Booking)
- *     description: จองสินค้าตามหมายเลข S/N ที่ระบุ โดยจะมีเวลาจำกัด 2 นาที หากไม่ยืนยันขาย ระบบจะคืนสินค้าเข้าสต็อกโดยอัตโนมัติ
+ *     summary: สร้างหรืออัปเดต Booking
  *     tags: [Bookings]
  *     security:
  *       - bearerAuth: []
@@ -34,61 +53,102 @@ const router = express.Router();
  *                   properties:
  *                     sn:
  *                       type: string
- *                       example: "A1B2C3D4E5F6"
+ *                     qty:
+ *                       type: number
  *     responses:
  *       201:
- *         description: จองสินค้าเรียบร้อย
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Products booked successfully (expire in 2 minutes).
- *                 booking:
- *                   type: object
- *       400:
- *         description: ไม่มีสินค้าหรือข้อมูลไม่ถูกต้อง
- *       500:
- *         description: ข้อผิดพลาดภายในระบบ
+ *         description: Booking ถูกสร้างหรืออัปเดตเรียบร้อย
  */
-router.post("/", protect, createBooking);
+router.post("/", protect, createOrUpdateBooking);
+
+/**
+ * @swagger
+ * /bookings/add/{bookingId}:
+ *   post:
+ *     summary: เพิ่มสินค้าเข้า Booking
+ *     tags: [Bookings]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: bookingId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID ของ Booking
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               items:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     sn:
+ *                       type: string
+ *     responses:
+ *       200:
+ *         description: เพิ่มสินค้าเรียบร้อย
+ */
+router.post("/add/:bookingId", protect, addProductsToBooking);
+
+/**
+ * @swagger
+ * /bookings/remove/{bookingId}:
+ *   post:
+ *     summary: ลบสินค้าออกจาก Booking
+ *     tags: [Bookings]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: bookingId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID ของ Booking
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               items:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     sn:
+ *                       type: string
+ *     responses:
+ *       200:
+ *         description: ลบสินค้าเรียบร้อย
+ */
+router.post("/remove/:bookingId", protect, removeProductsFromBooking);
 
 /**
  * @swagger
  * /bookings/confirm/{bookingId}:
  *   post:
- *     summary: ยืนยันการขายสินค้า (Confirm Booking)
- *     description: เมื่อยืนยันแล้ว สินค้าจะถูกเปลี่ยนสถานะเป็น "sold" และย้ายข้อมูลไปยังตารางการขาย (Sale)
+ *     summary: ยืนยันขายสินค้า
  *     tags: [Bookings]
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - name: bookingId
- *         in: path
+ *       - in: path
+ *         name: bookingId
  *         required: true
  *         schema:
  *           type: string
- *         description: รหัส Booking ที่ต้องการยืนยัน
+ *         description: ID ของ Booking
  *     responses:
  *       200:
- *         description: ยืนยันการขายเรียบร้อย
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Sale confirmed and recorded successfully.
- *                 salesCount:
- *                   type: integer
- *                   example: 3
- *       400:
- *         description: Booking หมดอายุหรือไม่พบข้อมูล
- *       500:
- *         description: ข้อผิดพลาดภายในระบบ
+ *         description: ยืนยันขายสินค้าเรียบร้อย
  */
 router.post("/confirm/:bookingId", protect, confirmBooking);
 
