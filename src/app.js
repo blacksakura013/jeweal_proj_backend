@@ -18,6 +18,7 @@ const allowedOrigins = [
   "http://localhost:5000",
   "http://localhost:1000",
   "https://precious-sawine-56ed1a.netlify.app",
+  "https://68e6ab0623f5e20008244850--precious-sawine-56ed1a.netlify.app"
 ];
 
 app.use(
