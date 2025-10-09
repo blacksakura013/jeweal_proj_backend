@@ -1,8 +1,7 @@
 import express from "express";
 import {
   createOrUpdateBooking,
-  addProductsToBooking,
-  removeProductsFromBooking,
+  removeItemsFromBooking,
   getBookings,
   confirmBooking,
 } from "../controllers/bookingController.js";
@@ -27,7 +26,7 @@ const router = express.Router();
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: รายการ Booking
+ *         description: รายการ Booking ของผู้ใช้
  */
 router.get("/", protect, getBookings);
 
@@ -53,48 +52,12 @@ router.get("/", protect, getBookings);
  *                   properties:
  *                     sn:
  *                       type: string
- *                     qty:
- *                       type: number
  *     responses:
  *       201:
  *         description: Booking ถูกสร้างหรืออัปเดตเรียบร้อย
  */
 router.post("/", protect, createOrUpdateBooking);
 
-/**
- * @swagger
- * /bookings/add/{bookingId}:
- *   post:
- *     summary: เพิ่มสินค้าเข้า Booking
- *     tags: [Bookings]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: bookingId
- *         required: true
- *         schema:
- *           type: string
- *         description: ID ของ Booking
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               items:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     sn:
- *                       type: string
- *     responses:
- *       200:
- *         description: เพิ่มสินค้าเรียบร้อย
- */
-router.post("/add/:bookingId", protect, addProductsToBooking);
 
 /**
  * @swagger
@@ -129,7 +92,7 @@ router.post("/add/:bookingId", protect, addProductsToBooking);
  *       200:
  *         description: ลบสินค้าเรียบร้อย
  */
-router.post("/remove/:bookingId", protect, removeProductsFromBooking);
+router.post("/remove/:bookingId", protect, removeItemsFromBooking);
 
 /**
  * @swagger

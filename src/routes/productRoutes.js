@@ -33,14 +33,12 @@ const router = express.Router();
  *               items:
  *                 type: object
  *                 properties:
- *                   sn:
- *                     type: string
  *                   sku:
+ *                     type: string
+ *                   name:
  *                     type: string
  *                   metal:
  *                     type: string
- *                   qty:
- *                     type: number
  *                   price:
  *                     type: number
  *                   description:
@@ -49,15 +47,28 @@ const router = express.Router();
  *                     type: string
  *                   status:
  *                     type: string
+ *                   units:
+ *                     type: array
+ *                     items:
+ *                       type: object
+ *                       properties:
+ *                         sn:
+ *                           type: string
+ *                         status:
+ *                           type: string
  *                 example:
- *                   sn: "A1B2C3D4E5F6"
  *                   sku: "SB0321BKGDM-43"
+ *                   name: "Diamond Bracelet"
  *                   metal: "18KWG"
- *                   qty: 1
  *                   price: 31800
- *                   description: "-"
- *                   img: "N/A"
+ *                   description: "Elegant white gold bracelet with diamond."
+ *                   img: "https://example.com/images/jewelry1.jpg"
  *                   status: "available"
+ *                   units:
+ *                     - sn: "A1B2C3D4E5F6"
+ *                       status: "available"
+ *                     - sn: "G7H8J9K1L2M3"
+ *                       status: "available"
  */
 router.get("/", protect, getProducts);
 
@@ -66,38 +77,10 @@ router.get("/", protect, getProducts);
  * /products/recover:
  *   post:
  *     summary: กู้คืนข้อมูลสินค้า (จาก JSON)
- *     description: ใช้สำหรับนำข้อมูลสินค้าจากแอป (JSON) กลับมาทับ collection เดิมในฐานข้อมูล
+ *     description: ใช้สำหรับนำข้อมูลสินค้าจากแอป (products.json) กลับมาทับ collection เดิมในฐานข้อมูล
  *     tags: [Products]
  *     security:
  *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: array
- *             items:
- *               type: object
- *               properties:
- *                 sn:
- *                   type: string
- *                   description: หมายเลขประจำสินค้า (สุ่มไม่ซ้ำ)
- *                 sku:
- *                   type: string
- *                 metal:
- *                   type: string
- *                 qty:
- *                   type: number
- *                 price:
- *                   type: number
- *                 description:
- *                   type: string
- *                 img:
- *                   type: string
- *                 status:
- *                   type: string
- *             example:
- *               - 
  *     responses:
  *       200:
  *         description: อัปเดตสินค้าสำเร็จ
