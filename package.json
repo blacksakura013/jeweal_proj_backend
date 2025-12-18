@@ -2,10 +2,10 @@
   "name": "fastify-project",
   "version": "1.0.0",
   "description": "A basic Fastify project using ES modules",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "dependencies": {
     "@fastify/cors": "^9.0.1",
