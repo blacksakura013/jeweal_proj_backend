@@ -1,4 +1,9 @@
 // Require the framework and instantiate it
+
+const express = require('express')
+const app = express()
+const port = process.env.PORT || 4000 
+
 const masterController = require("./controllers/masterController");
 const fastifyCors = require("@fastify/cors"); //
 const inventoryInSchema = require("./validation/inventory/inventoryInValidateSchema");
@@ -287,7 +292,7 @@ fastify.get('/:main/:action', { preHandler: dynamicPermissionMiddleware }, async
 
 
 // เริ่มเซิร์ฟเวอร์
-fastify.listen({ port: 3001 }, function (err, address) {
+fastify.listen({ port: port }, function (err, address) {
   if (err) {
     fastify.log.error(err);
     process.exit(1);
