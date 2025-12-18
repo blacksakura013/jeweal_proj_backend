@@ -2,7 +2,7 @@
 
 const express = require('express')
 const app = express()
-const port = process.env.PORT || 4000 
+
 
 const masterController = require("./controllers/masterController");
 const fastifyCors = require("@fastify/cors"); //
@@ -292,10 +292,16 @@ fastify.get('/:main/:action', { preHandler: dynamicPermissionMiddleware }, async
 
 
 // เริ่มเซิร์ฟเวอร์
-fastify.listen({ port: port }, function (err, address) {
-  if (err) {
-    fastify.log.error(err);
-    process.exit(1);
+const port = process.env.PORT || 4000;
+
+fastify.listen(
+  { port, host: '0.0.0.0' },
+  function (err, address) {
+    if (err) {
+      fastify.log.error(err);
+      process.exit(1);
+    }
+    fastify.log.info(`Server listening at ${address}`);
   }
-  // Server is now listening on ${address}
-});
+);
+
