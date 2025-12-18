@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Movement</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr.clickable-row {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Stock Movement</h1>
+    <table id="movement-table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Stone Code</th>
+                <th>Lot</th>
+                <th>Stone</th>
+                <th>Shape</th>
+                <th>Size</th>
+                <th>Color</th>
+                <th>Cutting</th>
+                <th>Quality</th>
+                <th>In (Cts)</th>
+                <th>In (Pcs)</th>
+                <th>Out (Cts)</th>
+                <th>Out (Pcs)</th>
+                <th>Balance (Cts)</th>
+                <th>Balance (Pcs)</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    <script>
+        const socket = io('http://localhost:3030'); 
+
+        socket.on('stock-movement-updated', (data) => {
+            const tableBody = document.querySelector('#movement-table tbody');
+            tableBody.innerHTML = ''; 
+
+            data.with_lot.forEach((movement, index) => {
+                const row = document.createElement('tr');
+                row.classList.add('clickable-row');
+                row.dataset.stoneCode = movement.stone_code;
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${movement.stone_code}</td>
+                    <td>${movement.lot_no}</td>
+                    <td>${movement.stone}</td>
+                    <td>${movement.shape}</td>
+                    <td>${movement.size}</td>
+                    <td>${movement.color}</td>
+                    <td>${movement.cutting}</td>
+                    <td>${movement.quality}</td>
+                    <td>${movement.in_cts}</td>
+                    <td>${movement.in_pcs}</td>
+                    <td>${movement.out_cts}</td>
+                    <td>${movement.out_pcs}</td>
+                    <td>${movement.balance_cts}</td>
+                    <td>${movement.balance_pcs}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+
+            data.without_lot.forEach((movement, index) => {
+                const row = document.createElement('tr');
+                row.classList.add('clickable-row');
+                row.dataset.stoneCode = movement.stone_code;
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${movement.stone_code}</td>
+                    <td>—</td>
+                    <td>${movement.stone}</td>
+                    <td>${movement.shape}</td>
+                    <td>${movement.size}</td>
+                    <td>${movement.color}</td>
+                    <td>${movement.cutting}</td>
+                    <td>${movement.quality}</td>
+                    <td>${movement.in_cts}</td>
+                    <td>${movement.in_pcs}</td>
+                    <td>${movement.out_cts}</td>
+                    <td>${movement.out_pcs}</td>
+                    <td>${movement.balance_cts}</td>
+                    <td>${movement.balance_pcs}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+
+            // Add click event listener to each row
+            document.querySelectorAll('.clickable-row').forEach(row => {
+                row.addEventListener('click', () => {
+                    const stoneCode = row.dataset.stoneCode;
+                    window.location.href = `/stock-movement/${stoneCode}`;
+                });
+            });
+        });
+
+        socket.on('message', (msg) => {
+            console.log(msg); 
+        });
+    </script>
+</body>
+</html>

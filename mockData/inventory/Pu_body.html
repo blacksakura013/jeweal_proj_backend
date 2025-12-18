@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice - PU-005</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            color: #000;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .header, .vendor, .purchase-info, .table, .footer {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header .logo {
+            width: 100px;
+            height: 100px;
+            background-color: #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .header .company-info {
+            flex: 1;
+            padding-left: 20px;
+            word-wrap: break-word;
+        }
+        .header .purchase {
+            text-align: right;
+            min-width: 200px;
+        }
+        .header .purchase h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .header .barcode {
+            margin-top: 10px;
+        }
+
+        /* Vendor and Purchase Info Layout */
+        .vendor-section {
+            display: grid;
+            grid-template-columns: 6fr 4fr; /* Vendor takes 60%, Purchase Info takes 40% */
+            gap: 20px;
+            width: 100%;
+        }
+        .vendor-section .vendor-info {
+            border: 1px solid #d0d3d4;
+            padding: 10px;
+        }
+        .purchase-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 10px;
+        }
+
+        .table table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .table th, .table td {
+            padding: 8px;
+            text-align: center;
+        }
+        .table th {
+            background-color: #f2f2f2;
+        }
+        .remark-row {
+            text-align: left;
+        }
+
+        /* Note and Summary Layout */
+        .note-summary {
+            display: grid;
+            grid-template-columns: 6fr 4fr; /* Note takes 60%, Summary takes 40% */
+            gap: 20px;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .note {
+            border: 1px solid #d0d3d4;
+            padding: 10px;
+        }
+        .note p {
+            margin: 0;
+        }
+        .summary .summary-details {
+            width: 100%;
+        }
+        .summary .summary-details p {
+            margin: 5px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+        .summary .summary-details p strong {
+            font-weight: bold;
+        }
+        .summary .summary-details p.total {
+            border-top: 1px solid #000;
+            padding-top: 5px;
+        }
+
+        .footer {
+            width: 100%;
+            margin-top: 40px;
+        }
+        .footer .signatures {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+        }
+        .footer .signatures div {
+            width: 30%;
+            text-align: center;
+        }
+        .footer .signatures div:after {
+            content: "";
+            display: block;
+            border-top: 1px solid #000;
+            margin-top: 20px;
+        }
+        /* ลบเส้นขอบของตาราง */
+        .table, .table th, .table td {
+            border: none;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <div class="header">
+        <div class="logo">LOGO</div>
+        <div class="company-info">
+            <strong>Jeweal Prosoft Co., Ltd. (Head Office)</strong><br>
+            11/112 Charoen Krung 30, Bang Rak, Bangkok 10500, Thailand<br>
+            +66 12 3456 7899<br>
+            jeweal@gmail.com<br>
+            <strong>Tax ID: 1xxxxxx111110</strong>
+        </div>
+        <div class="purchase">
+            <h1>Purchase</h1>
+            <div class="barcode">
+                <svg id="barcode"></svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vendor and Purchase Info Section -->
+    <div class="vendor-section">
+        <div class="vendor-info">
+            <strong>Vendor</strong><br>
+            Jah Jewelry Co., Ltd. (Head Office)<br>
+            Tax ID: 2xxxxxx222220<br>
+            1013 Geylang East Avenue 3, Southeast, 389728, Singapore<br>
+            Mrs. Jah Jewelry<br>
+            +65 34 3456 7788<br>
+            jahjewelry@gmail.com
+        </div>
+        <div class="purchase-info">
+            <div><strong>Purchase No:</strong> PU-005</div>
+            <div><strong>Date:</strong> 20/08/2024</div>
+            <div><strong>User:</strong> BB</div>
+            <div><strong>Reference No:</strong> PU20211100001</div>
+            <div><strong>Page:</strong> 1 of 1</div>
+            <div><strong>Currency:</strong> USD</div>
+            <div><strong>Exchange Rate:</strong> 12.34</div>
+        </div>
+    </div>
+
+    <!-- Product Table Section -->
+    <div class="table">
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Stone</th>
+                    <th>Shape</th>
+                    <th>Size</th>
+                    <th>Color</th>
+                    <th>Cutting</th>
+                    <th>Quality</th>
+                    <th>Clarity</th>
+                    <th>Pcs</th>
+                    <th>Weight</th>
+                    <th>Price/Unit</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Diamond</td>
+                    <td>Round</td>
+                    <td>5.5x4 MM</td>
+                    <td>White</td>
+                    <td>Normal</td>
+                    <td>AAA</td>
+                    <td>VS2</td>
+                    <td>1</td>
+                    <td>0.5000</td>
+                    <td>50,000.00 / Cts</td>
+                    <td>25,000.00</td>
+                </tr>
+                <!-- เพิ่ม class "remark-row" เพื่อจัดการข้อความ Remark: Stock ให้อยู่ซ้ายสุด -->
+                <tr class="remark-row">
+                    <td colspan="12">Remark: Stock</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Diamond</td>
+                    <td>Emerald</td>
+                    <td>4.4x4 MM</td>
+                    <td>Yellow</td>
+                    <td>Full</td>
+                    <td>AA</td>
+                    <td>VS1</td>
+                    <td>1</td>
+                    <td>0.5000</td>
+                    <td>50,000.00 / Cts</td>
+                    <td>25,000.00</td>
+                </tr>
+                <tr class="remark-row">
+                    <td colspan="12">Remark: Stock</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Diamond</td>
+                    <td>Round</td>
+                    <td>4 MM</td>
+                    <td>White</td>
+                    <td>Normal</td>
+                    <td>AAA</td>
+                    <td>VS2</td>
+                    <td>1</td>
+                    <td>0.5000</td>
+                    <td>50,000.00 / Cts</td>
+                    <td>25,000.00</td>
+                </tr>
+                <tr class="remark-row">
+                    <td colspan="12">Remark: Stock</td>
+                </tr>
+            </tbody>
+        </table>
+    </div><br><br><br><br><br><br><br><br><br><br>
+
+    <!-- Note and Summary Section -->
+    <div class="note-summary">
+        <!-- Note Section -->
+        <div class="note">
+            <p><strong>Note:</strong></p>
+            <p></p>
+        </div>
+
+        <!-- Summary Section -->
+        <div class="summary">
+            <div class="summary-details">
+                <p><strong>Subtotal:</strong><span>75,000.00 USD</span></p>
+                <p><strong>Discount:</strong><span>5,000.00 USD</span></p>
+                <p><strong>Amount After Discount:</strong><span>70,000.00 USD</span></p>
+                <p><strong>VAT (7%):</strong><span>4,900.00 USD</span></p>
+                <p class="total"><strong>Total Amount:</strong><span><strong>74,900.00 USD</strong></span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <div class="footer">
+        <div class="signatures">
+            <div>Prepared By:</div>
+            <div>Approved By:</div>
+            <div>Received By:</div>
+        </div>
+    </div>
+
+    <script>
+        JsBarcode("#barcode", "PU-005", {
+            format: "CODE128",
+            lineColor: "#000",
+            width: 2,
+            height: 50,
+            displayValue: false
+        });
+    </script>
+</body>
+</html>

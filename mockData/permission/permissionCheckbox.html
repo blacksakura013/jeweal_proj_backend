@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Update User Permissions</title>
+</head>
+<body>
+  <h1>Update User Permissions</h1>
+  <form id="permissionsForm">
+    <label><input type="checkbox" name="permissions" value="view_data"> View</label><br>
+    <label><input type="checkbox" name="permissions" value="add_data"> Add</label><br>
+    <label><input type="checkbox" name="permissions" value="edit_data"> Edit </label><br>
+    <label><input type="checkbox" name="permissions" value="delete_data"> Delete </label><br>
+    <label><input type="checkbox" name="permissions" value="price"> Price</label><br>
+    <input type="hidden" name="username" value="testuser">
+    <button type="submit">Update Permissions</button>
+  </form>
+
+  <script>
+    document.getElementById('permissionsForm').addEventListener('submit', async function(event) {
+      event.preventDefault();
+
+      const formData = new FormData(this);
+      const permissions = formData.getAll('permissions');
+      const username = formData.get('username');
+
+      try {
+        const response = await fetch('/admin/user/' + username + '/permissions', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ permissions })
+        });
+
+        if (response.ok) {
+          alert('Permissions updated successfully');
+        } else {
+          alert('Failed to update permissions');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    });
+  </script>
+</body>
+</html>
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice - PU-005</title>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        h1, h3 {
+            margin: 0;
+            padding: 0;
+        }
+        .header, .footer {
+            margin-bottom: 20px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header-left {
+            width: 60%;
+        }
+        .header-right {
+            text-align: right;
+        }
+        .barcode {
+            text-align: right;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: center;
+        }
+        .container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .container .left-section, .container .right-section {
+            width: 48%;
+        }
+        .right-align {
+            text-align: right;
+        }
+        .summary {
+            margin-top: 20px;
+        }
+        .summary p {
+            margin: 5px 0;
+        }
+        .footer p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <div class="header">
+        <div class="header-left">
+            <h1>LOGO</h1>
+            <p>Jah Jewelry Co., Ltd (Head Office)</p>
+            <p>Address: 11/12 Charoen Krung 30, Bang Rak, Bangkok 10500, Thailand</p>
+            <p>Phone: +66 12 3456 7899</p>
+            <p>Email: jeweal@gmail.com</p>
+            <p><strong>Tax ID: 1xxxxxx111110</strong></p>
+        </div>
+        <div class="header-right">
+            <h1><strong>Purchase</strong></h1>
+            <svg id="barcode"></svg>
+            <script>
+                JsBarcode("#barcode", "PU-005", {
+                    format: "CODE128",
+                    lineColor: "#000",
+                    width: 2,
+                    height: 50,
+                    displayValue: false
+                });
+            </script>
+        </div>
+    </div>
+
+    <!-- Vendor and Purchase Details Section -->
+    <div class="container">
+        <!-- Left Section (Vendor Info) -->
+        <div class="left-section">
+            <h3>Vendor</h3>
+            <p>Jah Jewelry Co., Ltd</p>
+            <p>Tax ID: 2xxxxxx222220</p>
+            <p>Address: 1013 Geylang East Avenue 3, Southeast, 389728, Singapore</p>
+            <p>Mrs. Jah Jewelry</p>
+            <p>Phone: +65 34 3456 7788</p>
+            <p>Email: jahjewelry@gmail.com</p>
+        </div>
+
+        <!-- Right Section (Purchase Details) -->
+        <div class="right-section">
+            <p><strong>Purchase No:</strong> PU-005</p>
+            <p><strong>Date:</strong> 20/08/2024</p>
+            <p><strong>User:</strong> BB</p>
+            <p><strong>Reference No:</strong> PU20211100001</p>
+            <p><strong>Currency:</strong> USD</p>
+            <p><strong>Exchange Rate:</strong> 12.34</p>
+        </div>
+    </div>
+
+    <!-- Product Table Section -->
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Stone</th>
+                    <th>Shape</th>
+                    <th>Quality</th>
+                    <th>Clarity</th>
+                    <th>Pcs</th>
+                    <th>Weight</th>
+                    <th>Cutting</th>
+                    <th>Size</th>
+                    <th>Color</th>
+                    <th>Price/Unit</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Diamond</td>
+                    <td>Round</td>
+                    <td>AAA</td>
+                    <td>VS2</td>
+                    <td>1</td>
+                    <td>0.5000</td>
+                    <td>Normal</td>
+                    <td>5.5x4 MM</td>
+                    <td>White</td>
+                    <td>50,000.00 / Cts</td>
+                    <td>25,000.00</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Diamond</td>
+                    <td>Emerald</td>
+                    <td>AA</td>
+                    <td>VS1</td>
+                    <td>1</td>
+                    <td>0.5000</td>
+                    <td>Full</td>
+                    <td>4.4x4 MM</td>
+                    <td>Yellow</td>
+                    <td>50,000.00 / Cts</td>
+                    <td>25,000.00</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Diamond</td>
+                    <td>Round</td>
+                    <td>AAA</td>
+                    <td>VS2</td>
+                    <td>1</td>
+                    <td>0.5000</td>
+                    <td>Normal</td>
+                    <td>4 MM</td>
+                    <td>White</td>
+                    <td>50,000.00 / Cts</td>
+                    <td>25,000.00</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>Diamond</td>
+                    <td>Round</td>
+                    <td>AAA</td>
+                    <td>VS2</td>
+                    <td>1</td>
+                    <td>0.5000</td>
+                    <td>Normal</td>
+                    <td>4 MM</td>
+                    <td>White</td>
+                    <td>50,000.00 / Cts</td>
+                    <td>25,000.00</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>Diamond</td>
+                    <td>Round</td>
+                    <td>AAA</td>
+                    <td>VS2</td>
+                    <td>1</td>
+                    <td>0.5000</td>
+                    <td>Normal</td>
+                    <td>4 MM</td>
+                    <td>White</td>
+                    <td>50,000.00 / Cts</td>
+                    <td>25,000.00</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>Diamond</td>
+                    <td>Round</td>
+                    <td>AAA</td>
+                    <td>VS2</td>
+                    <td>1</td>
+                    <td>0.5000</td>
+                    <td>Normal</td>
+                    <td>4 MM</td>
+                    <td>White</td>
+                    <td>50,000.00 / Cts</td>
+                    <td>25,000.00</td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>Diamond</td>
+                    <td>Round</td>
+                    <td>AAA</td>
+                    <td>VS2</td>
+                    <td>1</td>
+                    <td>0.5000</td>
+                    <td>Normal</td>
+                    <td>4 MM</td>
+                    <td>White</td>
+                    <td>50,000.00 / Cts</td>
+                    <td>25,000.00</td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td>Diamond</td>
+                    <td>Round</td>
+                    <td>AAA</td>
+                    <td>VS2</td>
+                    <td>1</td>
+                    <td>0.5000</td>
+                    <td>Normal</td>
+                    <td>4 MM</td>
+                    <td>White</td>
+                    <td>50,000.00 / Cts</td>
+                    <td>25,000.00</td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Summary Section -->
+    <div class="summary">
+        <p><strong>Subtotal:</strong> 75,000.00 USD</p>
+        <p><strong>Discount:</strong> 5,000.00 USD</p>
+        <p><strong>Amount After Discount:</strong> 70,000.00 USD</p>
+        <p><strong>VAT (7%):</strong> 4,900.00 USD</p>
+        <p><strong>Total Amount:</strong> 74,900.00 USD</p>
+    </div>
+
+    <!-- Footer Section -->
+    <div class="footer">
+        <p>Prepared By:</p>
+        <p>Approval By:</p>
+        <p>Received By:</p>
+    </div>
+
+</body>
+</html> -->
